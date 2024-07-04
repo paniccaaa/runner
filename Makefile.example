@@ -1,0 +1,5 @@
+run:
+	@go run cmd/runner/main.go
+
+mig:
+	@migrate migrations -database "postgres://<username>:<password>@<host>:<port>/<database_name>" -verbose up

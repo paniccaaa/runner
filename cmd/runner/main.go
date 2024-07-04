@@ -5,16 +5,23 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/paniccaaa/runner/internal/app"
+	"github.com/paniccaaa/runner/internal/config"
 )
 
 func main() {
-	// init config
+	cfg := config.MustLoad()
 
 	// init logger
+	log := setupLogger(cfg.Env)
+	log.Info("starting app", slog.Int("cfg", cfg.GRPC.Port))
 
 	// init app
+	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI)
 
 	// start grpc-server
+	go app.GRPCServer.MustRun()
 
 	// gracefull shutdown
 	stop := make(chan os.Signal, 1)
@@ -22,9 +29,9 @@ func main() {
 
 	<-stop
 
-	// app.GRPCServer.Stop()
+	app.GRPCServer.Stop()
 
-	// log.Info("App stopped")
+	log.Info("App stopped")
 }
 
 const (

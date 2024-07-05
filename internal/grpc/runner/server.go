@@ -5,6 +5,8 @@ import (
 
 	run "github.com/paniccaaa/protos/gen/golang/runner"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Runner interface {
@@ -25,7 +27,11 @@ func Register(gRPC *grpc.Server, runner Runner) {
 }
 
 func (s *serverAPI) RunCode(ctx context.Context, req *run.CodeRequest) (*run.CodeResponse, error) {
-	panic("implement me")
+	code, output, err := s.runner.RunCode(ctx, req.GetCode())
+	if err != nil {
+		return nil, status.Error(codes.Internal, "failed to run code")
+	}
+	return &run.CodeResponse{Code: code, Output: output, Error: ""}, nil
 }
 
 func (s *serverAPI) ShareCode(ctx context.Context, req *run.CodeRequest) (*run.ShareResponse, error) {

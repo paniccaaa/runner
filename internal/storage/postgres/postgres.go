@@ -42,6 +42,6 @@ func (s *Storage) GetCodeByID(ctx context.Context, id int64) (models.SharedCode,
 	panic("implement me")
 }
 
-func (s *Storage) ShareCode(ctx context.Context, code string) (string, error) {
+func (s *Storage) SaveCode(ctx context.Context, code string) (string, error) {
 	panic("implement me")
 }

@@ -20,6 +20,7 @@ type App struct {
 func NewApp(log *slog.Logger, port int, runnerService runner.Runner, storage *postgres.Storage) *App {
 	gRPCServer := grpc.NewServer()
 
+	// right
 	runner.Register(gRPCServer, runnerService)
 
 	return &App{

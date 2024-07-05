@@ -23,6 +23,13 @@ func main() {
 	// start grpc-server
 	go app.GRPCServer.MustRun()
 
+	// testOutput, err := execute.ExecuteCode("package main\nimport \"fmt\"\nfunc main() {\n    fmt.Println(\"hello wrld\")\n}")
+	// if err != "" {
+	// 	log.Error("failed to exec code", slog.String("err", err))
+	// }
+
+	// fmt.Println(testOutput)
+
 	// gracefull shutdown
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)

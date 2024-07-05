@@ -2,9 +2,11 @@ package runner
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 
 	"github.com/paniccaaa/runner/internal/domain/models"
+	"github.com/paniccaaa/runner/internal/lib/execute"
 )
 
 type RunnerService struct {
@@ -15,7 +17,7 @@ type RunnerService struct {
 type Storage interface {
 	// SaveCode(ctx context.Context, code, output, errOutput string) (int64, error)
 	GetCodeByID(ctx context.Context, id int64) (models.SharedCode, error)
-	ShareCode(ctx context.Context, code string) (string, error)
+	SaveCode(ctx context.Context, code string) (string, error)
 }
 
 func NewRunnerService(log *slog.Logger, storage Storage) *RunnerService {
@@ -28,7 +30,12 @@ func NewRunnerService(log *slog.Logger, storage Storage) *RunnerService {
 // TODO: implement service layer
 
 func (s *RunnerService) RunCode(ctx context.Context, code string) (string, string, error) {
-	panic("implement me")
+	output, err := execute.ExecuteCode(code)
+	if err != "" {
+		s.log.Error("failed to exec code", slog.String("err", err))
+		return "", err, errors.New(err)
+	}
+	return output, "", nil
 }
 
 func (s *RunnerService) ShareCode(ctx context.Context, code string) (string, error) {

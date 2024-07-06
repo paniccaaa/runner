@@ -43,5 +43,5 @@ func ExecuteCode(code string) (string, string) {
 		return out.String(), stderr.String()
 	}
 
-	return out.String(), ""
+	return out.String(), stderr.String()
 }

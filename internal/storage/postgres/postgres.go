@@ -32,16 +32,37 @@ func (s *Storage) Close() error {
 	return s.db.Close()
 }
 
-// func (s *Storage) SaveCode(ctx context.Context, code, output, errOutput string) (int64, error) {
-// 	panic("implement me")
-// }
-
-// TODO: implement storage layer
-
 func (s *Storage) GetCodeByID(ctx context.Context, id int64) (models.SharedCode, error) {
-	panic("implement me")
+	const query = `
+			SELECT id, code, output, error
+			FROM shared_codes
+			WHERE id = $1;
+	`
+	var sharedCode models.SharedCode
+	err := s.db.QueryRowContext(ctx, query, id).Scan(
+		&sharedCode.ID,
+		&sharedCode.Code,
+		&sharedCode.Output,
+		&sharedCode.ErrOutput,
+	)
+	if err != nil {
+		return models.SharedCode{}, err
+	}
+
+	return sharedCode, nil
 }
 
-func (s *Storage) SaveCode(ctx context.Context, code string) (string, error) {
-	panic("implement me")
+func (s *Storage) SaveCode(ctx context.Context, code, output, extractedError string) (int64, error) {
+	const query = `
+			INSERT INTO shared_codes (code, output, error)
+			VALUES ($1, $2, $3)
+			RETURNING id;
+	`
+	var id int64
+	err := s.db.QueryRowContext(ctx, query, code, output, extractedError).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }

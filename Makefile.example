@@ -2,7 +2,7 @@ run:
 	@go run cmd/runner/main.go
 
 mig_up:
-	@migrate migrations -database "postgres://<username>:<password>@<host>:<port>/<database_name>" -verbose up
+	@migrate -path migrations -database "postgres://<username>:<password>@<host>:<port>/<database_name>" -verbose up
 
 mig_down:
-	@migrate migrations -database "postgres://<username>:<password>@<host>:<port>/<database_name>" -verbose down
+	@migrate -path migrations -database "postgres://<username>:<password>@<host>:<port>/<database_name>" -verbose down

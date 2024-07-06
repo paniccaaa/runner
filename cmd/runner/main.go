@@ -15,20 +15,13 @@ func main() {
 
 	// init logger
 	log := setupLogger(cfg.Env)
-	log.Info("starting app", slog.Int("cfg", cfg.GRPC.Port))
+	log.Info("starting app", slog.String("env", cfg.Env))
 
 	// init app
 	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI)
 
 	// start grpc-server
 	go app.GRPCServer.MustRun()
-
-	// testOutput, err := execute.ExecuteCode("package main\nimport \"fmt\"\nfunc main() {\n    fmt.Println(\"hello wrld\")\n}")
-	// if err != "" {
-	// 	log.Error("failed to exec code", slog.String("err", err))
-	// }
-
-	// fmt.Println(testOutput)
 
 	// gracefull shutdown
 	stop := make(chan os.Signal, 1)

@@ -18,7 +18,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
-	github.com/paniccaaa/protos v0.0.4
+	github.com/paniccaaa/protos v0.0.5
 	google.golang.org/grpc v1.65.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect

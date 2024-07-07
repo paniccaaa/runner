@@ -1,14 +1,16 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/paniccaaa/runner/internal/app"
+	"github.com/paniccaaa/runner/internal/clients/gateway"
+	"github.com/paniccaaa/runner/internal/clients/sso/grpc"
 	"github.com/paniccaaa/runner/internal/config"
-	"github.com/paniccaaa/runner/internal/grpc/gateway"
 )
 
 func main() {
@@ -20,6 +22,21 @@ func main() {
 
 	// init app
 	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI)
+
+	//init sso-client
+	ssoClient, err := grpc.New(
+		context.Background(),
+		log,
+		cfg.Clients.SSO.Address,
+		cfg.Clients.SSO.Timeout,
+		cfg.Clients.SSO.RetriesCount,
+	)
+	if err != nil {
+		log.Error("failed to init sso client", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+
+	_ = ssoClient
 
 	// start grpc-server
 	go app.GRPCServer.MustRun()

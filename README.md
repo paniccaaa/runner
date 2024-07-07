@@ -1,4 +1,8 @@
-# Runner service
+<div align="center">
+<h1>Runner Service</h1>
+</div>
+
+## About
 The Runner service allows you to ***execute*** and ***share*** Go code snippets.
 
 Protobuf contract: [runner](https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto) 

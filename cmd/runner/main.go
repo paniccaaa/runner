@@ -8,6 +8,7 @@ import (
 
 	"github.com/paniccaaa/runner/internal/app"
 	"github.com/paniccaaa/runner/internal/config"
+	"github.com/paniccaaa/runner/internal/grpc/gateway"
 )
 
 func main() {
@@ -23,6 +24,10 @@ func main() {
 	// start grpc-server
 	go app.GRPCServer.MustRun()
 
+	// start grpc-gateway
+	gwServer := gateway.MustRunGRPCGateway(cfg.GRPC.Port, log)
+	go gateway.StartGateway(gwServer, log)
+
 	// gracefull shutdown
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
@@ -30,6 +35,7 @@ func main() {
 	<-stop
 
 	app.GRPCServer.Stop()
+	gateway.StopGateway(gwServer, log)
 
 	log.Info("App stopped")
 }

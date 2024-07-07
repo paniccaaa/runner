@@ -8,6 +8,7 @@ import (
 	"github.com/paniccaaa/runner/internal/grpc/runner"
 	"github.com/paniccaaa/runner/internal/storage/postgres"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type App struct {
@@ -20,8 +21,9 @@ type App struct {
 func NewApp(log *slog.Logger, port int, runnerService runner.Runner, storage *postgres.Storage) *App {
 	gRPCServer := grpc.NewServer()
 
-	// right
+	// register a new service
 	runner.Register(gRPCServer, runnerService)
+	reflection.Register(gRPCServer)
 
 	return &App{
 		log:        log,

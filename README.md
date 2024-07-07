@@ -1,11 +1,11 @@
 # Runner service
-The Runner service allows you to execute and share Go code snippets.
+The Runner service allows you to ***execute*** and ***share*** Go code snippets.
 
 Protobuf contract: [runner](https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto) 
 
 ## Stack
 
-- **gRPC** / gRPC-gateway
+- **gRPC** / gRPC-gateway (for [understanding](https://github.com/grpc-ecosystem/grpc-gateway))
 - **PostgreSQL**
 - **cleanenv**
 - **slog**
@@ -17,6 +17,7 @@ Before running the application, make sure Go are installed on your system.
 1. **Clone** the repository
 ```bash
 git clone https://github.com/paniccaaa/runner.git
+cd runner
 ```
 2. **Create** the .env, local.yaml and Makefile (see .example in repository)
 3. **Run** the app locally
@@ -26,10 +27,12 @@ make run
 
 ## Endpoints
 
+For detailed API documentation, you can view the Swagger documentation. Copy the contents of [runner.swagger.json](https://github.com/paniccaaa/protos/blob/main/gen/golang/runner/runner.swagger.json) and paste it into [Swagger Editor](https://editor-next.swagger.io/) to explore and interact with the API.
+
 ### REST (gRPC-gateway)
-- **POST /run**: Retrieve a list of all posts.
-- **POST /share**: Create a new post.
-- **GET /shared/{id}**: Retrieve a post by its identifier.
+- **POST /run**: Execute a Go code snippet.
+- **POST /share**: Share a Go code snippet.
+- **GET /shared/{id}**: Retrieve a shared Go code snippet by id.
   
 ### gRPC
 - **RunCode**

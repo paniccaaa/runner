@@ -5,6 +5,8 @@
 ## About
 The Runner service allows you to ***execute*** and ***share*** Go code snippets.
 
+Additionally, it integrates an isAdmin endpoint from [sso](https://github.com/paniccaaa/sso) repository.
+
 Protobuf contract: [runner](https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto) 
 
 ## Stack

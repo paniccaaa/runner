@@ -3,3 +3,9 @@ db_uri: "your db uri here"
 grpc:
   port: 44000
   timeout: 5s
+clients:
+  sso:
+    address: "0.0.0.0:44044"
+    timeout: 5s
+    retriesCount: 3
+app_secret: "your-secret-here"

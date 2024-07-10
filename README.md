@@ -1,4 +1,4 @@
-<!-- <div align="center">
+<div>
 <h1>Runner Service</h1>
 <img src="gopher.png" alt="Runner Service Logo" width="200" height="200">
 </div>
@@ -11,21 +11,7 @@ Protobuf contract: [runner](https://github.com/paniccaaa/protos/blob/main/proto/
 
 ### Integration with SSO Service
 
-The Runner service leverages the [SSO](https://github.com/paniccaaa/sso) service to verify administrative privileges when processing the DeleteCode RPC. This integration ensures that only authorized administrators can delete shared code snippets, enhancing security and access control within the application. -->
-<div>
-  <h1>Runner Service</h1>
-  <div style="display: flex; align-items: center;">
-    <img src="gopher.png" alt="Runner Service Logo" width="200" height="200" style="margin-right: 20px;">
-    <div>
-      <h2>About</h2>
-      <h3>Runner Service Overview</h3>
-      <p>The Runner service allows you to <strong>execute</strong> and <strong>share</strong> Go code snippets.</p>
-      <p>Protobuf contract: <a href="https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto">runner</a></p>
-      <h3>Integration with SSO Service</h3>
-      <p>The Runner service leverages the <a href="https://github.com/paniccaaa/sso">SSO</a> service to verify administrative privileges when processing the DeleteCode RPC. This integration ensures that only authorized administrators can delete shared code snippets, enhancing security and access control within the application.</p>
-    </div>
-  </div>
-</div>
+The Runner service leverages the [SSO](https://github.com/paniccaaa/sso) service to verify administrative privileges when processing the DeleteCode RPC. This integration ensures that only authorized administrators can delete shared code snippets, enhancing security and access control within the application.
 
 ## Stack
 

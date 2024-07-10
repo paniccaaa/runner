@@ -1,13 +1,31 @@
-<div align="center">
+<!-- <div align="center">
 <h1>Runner Service</h1>
+<img src="gopher.png" alt="Runner Service Logo" width="200" height="200">
 </div>
 
 ## About
+### Runner Service Overview
 The Runner service allows you to ***execute*** and ***share*** Go code snippets.
 
-Additionally, it integrates an isAdmin endpoint from [sso](https://github.com/paniccaaa/sso) repository.
-
 Protobuf contract: [runner](https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto) 
+
+### Integration with SSO Service
+
+The Runner service leverages the [SSO](https://github.com/paniccaaa/sso) service to verify administrative privileges when processing the DeleteCode RPC. This integration ensures that only authorized administrators can delete shared code snippets, enhancing security and access control within the application. -->
+<div>
+  <h1>Runner Service</h1>
+  <div style="display: flex; align-items: center;">
+    <img src="gopher.png" alt="Runner Service Logo" width="200" height="200" style="margin-right: 20px;">
+    <div>
+      <h2>About</h2>
+      <h3>Runner Service Overview</h3>
+      <p>The Runner service allows you to <strong>execute</strong> and <strong>share</strong> Go code snippets.</p>
+      <p>Protobuf contract: <a href="https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto">runner</a></p>
+      <h3>Integration with SSO Service</h3>
+      <p>The Runner service leverages the <a href="https://github.com/paniccaaa/sso">SSO</a> service to verify administrative privileges when processing the DeleteCode RPC. This integration ensures that only authorized administrators can delete shared code snippets, enhancing security and access control within the application.</p>
+    </div>
+  </div>
+</div>
 
 ## Stack
 
@@ -39,7 +57,8 @@ For detailed API documentation, you can view the Swagger documentation. Copy the
 - **POST /run**: Execute a Go code snippet.
 - **POST /share**: Share a Go code snippet.
 - **GET /shared/{id}**: Retrieve a shared Go code snippet by id.
-  
+- **DELETE /shared/{id}?user_id={user_id}**: Delete a shared Go code snippet by id (only for admins, see [sso](https://github.com/paniccaaa/sso))
+
 ### gRPC
 - **RunCode**
 ```bash
@@ -67,6 +86,14 @@ $ grpcurl -plaintext -d '{"id": "2"}' localhost:44000 runner.Runner/GetCodeByID
 {
   "code": "package main\nimport \"fmt\"\nfunc main() {\n    fmt.Println(\"Hello world! Test ShareCode\")\n}",
   "output": "Hello world! Test ShareCode\n"
+}
+```
+- **DeleteCode**
+```bash
+$ grpcurl -plaintext -d '{"id": 2, "user_id": 1}' localhost:44000 runner.Runner/DeleteCode
+
+{
+  "success": true
 }
 ```
 ## Database migration

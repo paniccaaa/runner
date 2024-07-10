@@ -9,12 +9,12 @@ require (
 )
 
 require (
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0
-	github.com/paniccaaa/protos v0.0.8
+	github.com/paniccaaa/protos v0.0.10
 )
 
 require (
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.16.0 // indirect

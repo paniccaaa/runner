@@ -9,7 +9,7 @@ import (
 
 	"github.com/paniccaaa/runner/internal/app"
 	"github.com/paniccaaa/runner/internal/clients/gateway"
-	"github.com/paniccaaa/runner/internal/clients/sso/grpc"
+	ssoGrpc "github.com/paniccaaa/runner/internal/clients/sso/grpc"
 	"github.com/paniccaaa/runner/internal/config"
 )
 
@@ -20,11 +20,8 @@ func main() {
 	log := setupLogger(cfg.Env)
 	log.Info("starting app", slog.String("env", cfg.Env))
 
-	// init app
-	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI)
-
 	//init sso-client
-	ssoClient, err := grpc.New(
+	ssoClient, err := ssoGrpc.New(
 		context.Background(),
 		log,
 		cfg.Clients.SSO.Address,
@@ -36,12 +33,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	isAdmin, err := ssoClient.IsAdmin(context.Background(), 2)
-	if err != nil {
-		log.Error("is admin error", slog.String("error", err.Error()))
-	}
+	// init app
+	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI, ssoClient)
 
-	log.Info("user with user_id=2", slog.Bool("isAdmin", isAdmin))
+	// isAdmin, err := ssoClient.IsAdmin(context.Background(), 2)
+	// if err != nil {
+	// 	log.Error("is admin error", slog.String("error", err.Error()))
+	// }
+	// log.Info("user with user_id=2", slog.Bool("isAdmin", isAdmin))
 
 	// start grpc-server
 	go app.GRPCServer.MustRun()

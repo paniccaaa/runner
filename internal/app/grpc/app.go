@@ -18,7 +18,7 @@ type App struct {
 	storage    *postgres.Storage
 }
 
-func NewApp(log *slog.Logger, port int, runnerService runner.Runner, storage *postgres.Storage) *App {
+func NewApp(log *slog.Logger, port int, runnerService runner.RunnerProvider, storage *postgres.Storage) *App {
 	gRPCServer := grpc.NewServer()
 
 	// register a new service

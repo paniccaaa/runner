@@ -66,3 +66,23 @@ func (s *Storage) SaveCode(ctx context.Context, code, output, extractedError str
 
 	return id, nil
 }
+
+func (s *Storage) DeleteCode(ctx context.Context, id int64) error {
+	deleteQuery := "DELETE FROM shared_codes WHERE id = $1"
+
+	result, err := s.db.ExecContext(ctx, deleteQuery, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no rows affected, code with id %d not found", id)
+	}
+
+	return nil
+}

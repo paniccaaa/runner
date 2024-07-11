@@ -54,7 +54,6 @@ func (s *serverAPI) GetCodeByID(ctx context.Context, req *run.IdRequest) (*run.C
 }
 
 func (s *serverAPI) DeleteCode(ctx context.Context, req *run.DeleteCodeRequest) (*run.DeleteCodeResponse, error) {
-	// isAdmin, err := s.
 	isAdmin, err := s.runner.CheckAdmin(ctx, req.GetId(), req.GetUserId())
 	if err != nil {
 		return nil, err

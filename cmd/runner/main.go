@@ -36,12 +36,6 @@ func main() {
 	// init app
 	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI, ssoClient)
 
-	// isAdmin, err := ssoClient.IsAdmin(context.Background(), 2)
-	// if err != nil {
-	// 	log.Error("is admin error", slog.String("error", err.Error()))
-	// }
-	// log.Info("user with user_id=2", slog.Bool("isAdmin", isAdmin))
-
 	// start grpc-server
 	go app.GRPCServer.MustRun()
 

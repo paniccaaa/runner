@@ -29,7 +29,7 @@ Before running the application, make sure Go are installed on your system.
 git clone https://github.com/paniccaaa/runner.git
 cd runner
 ```
-2. **Create** the .env, local.yaml and Makefile (see .example in repository)
+2. **Create** the .env, local.yaml and Makefile (see .example in repository). Also see [sso](https://github.com/paniccaaa/sso).
 3. **Run** the app locally
 ```bash
 make run 

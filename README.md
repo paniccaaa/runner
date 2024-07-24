@@ -9,11 +9,16 @@ The Runner service allows you to ***execute*** and ***share*** Go code snippets.
 
 Protobuf contract: [runner](https://github.com/paniccaaa/protos/blob/main/proto/runner/runner.proto) 
 
-### Integration with SSO Service and Redis
+### Integration with SSO Service, Redis and Prometheus
 
 The Runner service leverages the [SSO](https://github.com/paniccaaa/sso) service to verify administrative privileges when processing the DeleteCode RPC. This integration ensures that only authorized administrators can delete shared code snippets, enhancing security and access control within the application.
 
 The Runner service uses Redis for caching shared code snippets to improve performance. When a code snippet is requested, the service first checks Redis. If the snippet is not found in the cache, it is retrieved from PostgreSQL and then stored in Redis for future requests. This reduces database load and speeds up data retrieval.
+
+The Runner service uses Prometheus to collect metrics. For example:
+```sh
+curl http://localhost:9100/metrics
+```
 
 ## Stack
 

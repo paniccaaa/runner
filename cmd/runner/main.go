@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log/slog"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -11,6 +12,7 @@ import (
 	"github.com/paniccaaa/runner/internal/clients/gateway"
 	ssoGrpc "github.com/paniccaaa/runner/internal/clients/sso/grpc"
 	"github.com/paniccaaa/runner/internal/config"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -42,6 +44,13 @@ func main() {
 	// start grpc-gateway
 	gwServer := gateway.MustRunGRPCGateway(cfg.GRPC.Port, log)
 	go gateway.StartGateway(gwServer, log)
+
+	// expose prometheus metrics
+	http.Handle("/metrics", promhttp.Handler())
+	go func() {
+		log.Info("starting metrics srv", slog.String("port", cfg.PrometheusADDR))
+		http.ListenAndServe(cfg.PrometheusADDR, nil)
+	}()
 
 	// gracefull shutdown
 	stop := make(chan os.Signal, 1)

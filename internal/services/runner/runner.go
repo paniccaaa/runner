@@ -2,10 +2,14 @@ package runner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log/slog"
+	"strconv"
+	"time"
 
 	"github.com/paniccaaa/runner/internal/domain/models"
+	"github.com/redis/go-redis/v9"
 
 	ssoGrpc "github.com/paniccaaa/runner/internal/clients/sso/grpc"
 	"github.com/paniccaaa/runner/internal/lib/execute"
@@ -15,6 +19,7 @@ import (
 type RunnerService struct {
 	log       *slog.Logger
 	storage   Storage
+	redis     *redis.Client
 	ssoClient *ssoGrpc.Client
 }
 
@@ -24,11 +29,12 @@ type Storage interface {
 	DeleteCode(ctx context.Context, id int64) error
 }
 
-func NewRunnerService(log *slog.Logger, storage Storage, ssoClient *ssoGrpc.Client) *RunnerService {
+func NewRunnerService(log *slog.Logger, storage Storage, ssoClient *ssoGrpc.Client, redisClient *redis.Client) *RunnerService {
 	return &RunnerService{
 		log:       log,
 		storage:   storage,
 		ssoClient: ssoClient,
+		redis:     redisClient,
 	}
 }
 
@@ -59,13 +65,35 @@ func (s *RunnerService) ShareCode(ctx context.Context, code string) (int64, erro
 		return 0, err
 	}
 
+	// Delete cache
+	cacheKey := strconv.FormatInt(id, 10)
+	s.redis.Del(ctx, cacheKey)
+
 	return id, nil
 }
 
 func (s *RunnerService) GetCodeByID(ctx context.Context, id int64) (string, string, string, error) {
+	cacheKey := strconv.FormatInt(id, 10)
+
+	// check cache
+	cacheCode, err := s.redis.Get(ctx, cacheKey).Result()
+	if err == nil {
+		// if cache exist, return him
+		var sharedCode models.SharedCode
+		if err := json.Unmarshal([]byte(cacheCode), &sharedCode); err == nil {
+			return sharedCode.Code, sharedCode.Output, sharedCode.ErrOutput, nil
+		}
+	}
+
 	sharedCode, err := s.storage.GetCodeByID(ctx, id)
 	if err != nil {
 		return "", "", "", err
+	}
+
+	// save cache
+	codeData, err := json.Marshal(sharedCode)
+	if err == nil {
+		s.redis.Set(ctx, cacheKey, codeData, 20*time.Minute)
 	}
 
 	return sharedCode.Code, sharedCode.Output, sharedCode.ErrOutput, nil

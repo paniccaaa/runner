@@ -11,12 +11,12 @@ import (
 )
 
 type Config struct {
-	Env            string     `yaml:"env" env-default:"local"`
-	DbURI          string     `yaml:"db_uri" env-required:"true"`
-	GRPC           GRPCConfig `yaml:"grpc"`
-	MigrationsPath string
-	Clients        ClientConfig `yaml:"clients"`
-	AppSecret      string       `yaml:"app_secret" env-required:"true" env:"APP_SECRET"`
+	Env       string       `yaml:"env" env-default:"local"`
+	DbURI     string       `yaml:"db_uri" env-required:"true"`
+	RedisADDR string       `yaml:"redis_addr" env-required:"true"`
+	GRPC      GRPCConfig   `yaml:"grpc"`
+	Clients   ClientConfig `yaml:"clients"`
+	AppSecret string       `yaml:"app_secret" env-required:"true" env:"APP_SECRET"`
 }
 
 type GRPCConfig struct {

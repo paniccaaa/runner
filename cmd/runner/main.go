@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// init app
-	app := app.NewApp(log, cfg.GRPC.Port, cfg.DbURI, ssoClient)
+	app := app.NewApp(log, cfg.GRPC.Port, ssoClient, cfg.DbURI, cfg.RedisADDR)
 
 	// start grpc-server
 	go app.GRPCServer.MustRun()

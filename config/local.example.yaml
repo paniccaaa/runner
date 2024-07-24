@@ -1,5 +1,6 @@
 env: "local"
 db_uri: "your db uri here"
+redis_addr: "0.0.0.0:6379"
 grpc:
   port: 44000
   timeout: 5s

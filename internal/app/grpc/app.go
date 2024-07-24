@@ -7,6 +7,7 @@ import (
 
 	"github.com/paniccaaa/runner/internal/grpc/runner"
 	"github.com/paniccaaa/runner/internal/storage/postgres"
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -16,9 +17,10 @@ type App struct {
 	gRPCServer *grpc.Server
 	port       int
 	storage    *postgres.Storage
+	redis      *redis.Client
 }
 
-func NewApp(log *slog.Logger, port int, runnerService runner.RunnerProvider, storage *postgres.Storage) *App {
+func NewApp(log *slog.Logger, port int, runnerService runner.RunnerProvider, storage *postgres.Storage, redis *redis.Client) *App {
 	gRPCServer := grpc.NewServer()
 
 	// register a new service
@@ -30,6 +32,7 @@ func NewApp(log *slog.Logger, port int, runnerService runner.RunnerProvider, sto
 		port:       port,
 		gRPCServer: gRPCServer,
 		storage:    storage,
+		redis:      redis,
 	}
 }
 
@@ -71,4 +74,6 @@ func (a *App) Stop() {
 	if err := a.storage.Close(); err != nil {
 		a.log.Error("failed to close storage", slog.String("error", err.Error()))
 	}
+
+	defer a.redis.Close()
 }
